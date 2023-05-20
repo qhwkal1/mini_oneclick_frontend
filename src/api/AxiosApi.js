@@ -170,6 +170,12 @@ const AxiosApi = {
       }
       return await axios.post(KH_DOMAIN + `/lostPw`, findPw);
   },
+
+  // 카테고리 별 강의 리스트 불러오기
+  loadList: async(categoryNum) => {
+    return await axios.get(KH_DOMAIN + `/category/details?categoryNum=${categoryNum}`);
+  },
+
   // 강의 상세 설명 페이지
   viewLecture: async(lectureNum, category) => {
     console.log("viewLecture 메소드 호출" + category + lectureNum);

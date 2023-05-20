@@ -83,6 +83,7 @@ const Title = styled.h3`
   align-items: center;
   padding: 10px 5px;
   margin: 0;
+  height: 40px;
   font-size: .9rem;
   font-weight: bold;
   /* margin-top: 5px; */
@@ -94,11 +95,12 @@ const Description = styled.div`
   font-weight: normal;
   display:flex;
   height: 30px;
-  padding: 15px 5px;
+  padding: 5px 5px;
   color: gray;
   /* border: 1px solid black; */
   text-overflow: ellipsis;
   overflow: hidden;
+  margin-bottom: 5px;
 `;
 const PriceDate = styled.div`
   display: flex;
@@ -127,23 +129,33 @@ const Heart = styled.div`
     
 `;
 
-const CategoryList = () => {
+const CategoryList = ({ selNum }) => {
   const categoryNum = null; // nav 메뉴에서 강의 카테고리 클릭시 context 로 값 끌어옴
+
+  const info = [
+    "요리",
+    "베이킹",
+    "공예",
+    "운동"
+  ];
+  console.log(info[1-1]);
   const [sortNum, setSortNum] = useState(1);
+  // axios 로 받아온 DB를 담아두기
   const [list, setList] = useState([]);
 
   useEffect(() => {
     const loadLectureList = async() => {
       console.log("loadLectureList 실행");
-      const rsp = await AxiosApi.loadList(categoryNum);
+      const rsp = await AxiosApi.loadList(4);
       if(rsp.status === 200) {
         const sortList = rsp.data;
+        console.log(sortList);
         if(sortNum === 1) {
-          sortList.sort((a, b) => b.likecount - a.likecount); // 인기순으로 정렬
+          setList(sortList.sort((a, b) => a.likeCount - b.likeCount)); // 인기순으로 정렬
         } else if (sortNum === 2) {
-          sortList.sort((a, b) => a.date - b.date); // 날짜 빠른 순으로 정렬
+          setList(sortList.sort((a, b) => a.startDate - b.startDate)); // 날짜 빠른 순으로 정렬
         } else if (sortNum === 3) {
-          sortList.sort((a, b) => b.price - a.price); // 가격 높은 순으로 정렬
+          setList(sortList.sort((a, b) => b.price - a.price)); // 가격 높은 순으로 정렬
         }
       }
       else console.log("loadLectureList 실행 실패");
@@ -153,7 +165,7 @@ const CategoryList = () => {
 
   return(
     <Contain>
-      <h2>요리</h2>
+      <h2>{info[1-1]}</h2>
       <Sort>
         <li><div className={sortNum === 1 ? "activeSort" : "none"} onClick={()=>setSortNum(1)}>인기순</div></li>
         <li><div className={sortNum === 2 ? "activeSort" : "none"} onClick={()=>setSortNum(2)}>등록일순</div></li>
@@ -161,28 +173,30 @@ const CategoryList = () => {
       </Sort>
       <SectionContain>
         <Section1>
+        {list && list.map(listData => (
+            <div>
           <SectionBox1>
             <Heart><div><img src={heart} alt="좋아요" /></div></Heart>
-            {/* {list & list.map(listData => ( */}
-            <div>
-              <Thumbnail src="https://cdn.class101.net/images/1dfa3159-518b-43f7-9647-6dc8f53de06d/2048xauto.webp" alt="class thumbnail" />
+
+              <Thumbnail src={listData.thumb} alt="class thumbnail" />
               <CategoryTextStyle>
-                <Category>Category Name</Category>
+                <Category>{info[selNum-1]}</Category>
                 <hr />
-                <Category className="line">Name</Category>
+                <Category className="line">{listData.lecturer}</Category>
               </CategoryTextStyle>
-              <Title>Class Titleddddddddddddddddddddd</Title>
-              <Description>이 강의는 어쩌고저쩌고어쩌sdfsdfsdfsdffsdfsdfsdfsdf 입니다</Description>
+              <Title>{listData.name}</Title>
+              <Description>{listData.intro}</Description>
               <PriceDate>
-                <div className="price">239000원</div>
+                <div className="price">{listData.price}원</div>
                 <div className="dateContain">
-                  <div className="date">시작일 : </div>
-                  <div className="date">종료일 : </div>
+                  <div className="date">시작일 : {listData.startDate}</div>
+                  <div className="date">종료일 : {listData.endDate}</div>
                 </div>
               </PriceDate>
-            </div>
-            {/* ))} */}
+
           </SectionBox1>
+          </div>
+            ))}
         </Section1>
         </SectionContain>
     </Contain>
