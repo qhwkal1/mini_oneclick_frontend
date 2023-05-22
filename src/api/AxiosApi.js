@@ -177,8 +177,8 @@ const AxiosApi = {
   },
 
   // 강의 상세 설명 페이지
-  viewLecture: async(lectureNum, category) => {
-    console.log("viewLecture 메소드 호출" + category + lectureNum);
+  viewLecture: async(category, lectureNum) => {
+    console.log("viewLecture axios 호출" + category + lectureNum);
     return await axios.get(KH_DOMAIN + `/class?category=${category}&lectureNum=${lectureNum}`);
   },
 
@@ -247,6 +247,10 @@ const AxiosApi = {
     };
     return await axios.post(KH_DOMAIN + "/ordinaryPay", payment);
   },
+
+  loadLectureImg : async(categoryNum, lectureNum) => {
+    return await axios.get(KH_DOMAIN + `/class/img?categoryNum=${categoryNum} & lectureNum=${lectureNum}`);
+  }
 };
 
 

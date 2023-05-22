@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import AxiosApi from "../api/AxiosApi";
+import { useContext } from "react";
+import UserStore, { UserContext } from "../context/UserStore";
 
 
 // 수강 설명 이미지
@@ -44,9 +47,16 @@ const ClassImg = styled.div`
   }
 `
 const MainIMG = () => {
+  const context = useContext(UserContext);
+  const { categoryNum, lectureNum } = context;
+  // useEffect(() => {
+  //   const loadLectureImg = async() => {
+  //     const rsp = await AxiosApi.loadLectureImg(categoryNum, lectureNum);
+  //   }
+  // })
 
   return (
-    <ClassImg>
+    <ClassImg onClick={()=>{console.log(categoryNum, lectureNum)}}>
       {detailImg1}
       {detailImg2}
       {detailImg3}

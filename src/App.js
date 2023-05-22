@@ -21,6 +21,7 @@ import OrdinaryPayment from './pages/OrdinaryPayment';
 import PayComplite from './pages/PayComplite';
 import Refund from './pages/Refund';
 import Lecture from './pages/Lecture_Main';
+import CategoryList from './pages/Category';
 
 
 function App() {
@@ -29,7 +30,6 @@ function App() {
    <UserStore>
    <Router>
         <Routes>
-         
           <Route path="/Mypage" element={<Mypage />}/>
           <Route path="/MyEdit" element={<MyEdit />} />
           <Route path="/MyClass" element={<MyClass />} />
@@ -45,6 +45,7 @@ function App() {
           <Route path="/PayComplite" element={<PayComplite />}/>
           <Route path="/Refund" element={<Refund />}/>
           <Route path="/Class" element={<Lecture />}/>
+          <Route path="/Category" element={<CategoryList />}/>
           <Route path='/AdminLogin' element={<AdminLogin />} />
           <Route path="/MyWriteReview/:lectureId" element={<MyWriteReview />}/>
           <Route path="/MyUpdateReview/:lectureId/:reviewNum" element={<MyUpdateReview />}/>

@@ -2,7 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import heart from "../images/heart.png";
-import AxiosApi from "api/AxiosApi";
+import AxiosApi from "../api/AxiosApi";
+import { useContext } from "react";
+import { UserContext } from "../context/UserStore";
+import { Link } from "react-router-dom";
+import Header from "./Header";
+import Footer from "./Footer";
 
 const Contain = styled.div`
   max-width: 1280px;
@@ -129,16 +134,17 @@ const Heart = styled.div`
     
 `;
 
-const CategoryList = ({ selNum }) => {
-  const categoryNum = null; // nav 메뉴에서 강의 카테고리 클릭시 context 로 값 끌어옴
-
+const CategoryList = () => {
+ // nav 메뉴에서 강의 카테고리 클릭시 context 로 값 끌어옴
+  const context = useContext(UserContext);
+  const { setLectureNum, categoryNum, lectureNum} = context;
   const info = [
+    "전체보기",
     "요리",
     "베이킹",
     "공예",
     "운동"
   ];
-  console.log(info[1-1]);
   const [sortNum, setSortNum] = useState(1);
   // axios 로 받아온 DB를 담아두기
   const [list, setList] = useState([]);
@@ -146,9 +152,17 @@ const CategoryList = ({ selNum }) => {
   useEffect(() => {
     const loadLectureList = async() => {
       console.log("loadLectureList 실행");
-      const rsp = await AxiosApi.loadList(4);
+      const rsp = await AxiosApi.loadList(categoryNum);
       if(rsp.status === 200) {
         const sortList = rsp.data;
+        const lecInfo = await AxiosApi.loadList(categoryNum);
+        console.log("loadList 통신완료 : " + lecInfo.data);
+        if(Array.isArray(lecInfo.data) && lecInfo.data.length > 0) {
+          const lecture = lecInfo.data[0];
+          setLectureNum(lecture.lectureNum);
+          console.log("LectureNum 출력 : " + lecture.lectureNum);
+
+        };
         console.log(sortList);
         if(sortNum === 1) {
           setList(sortList.sort((a, b) => a.likeCount - b.likeCount)); // 인기순으로 정렬
@@ -161,45 +175,51 @@ const CategoryList = ({ selNum }) => {
       else console.log("loadLectureList 실행 실패");
     }
     loadLectureList();
-  },[sortNum]);
+  },[sortNum, categoryNum]); // context, sortNum 같이 들어가야함
+const event = (listData) => {
+  setLectureNum(listData.lectureNum);
+}
 
   return(
+    <>
+    <Header/>
     <Contain>
-      <h2>{info[1-1]}</h2>
+      <h2>{info[categoryNum]}</h2>
       <Sort>
         <li><div className={sortNum === 1 ? "activeSort" : "none"} onClick={()=>setSortNum(1)}>인기순</div></li>
-        <li><div className={sortNum === 2 ? "activeSort" : "none"} onClick={()=>setSortNum(2)}>등록일순</div></li>
+        <li><div className={sortNum === 2 ? "activeSort" : "none"} onClick={()=>setSortNum(2)}>종료일순</div></li>
         <li><div className={sortNum === 3 ? "activeSort" : "none"} onClick={()=>setSortNum(3)}>가격순</div></li>
       </Sort>
       <SectionContain>
         <Section1>
         {list && list.map(listData => (
-            <div>
-          <SectionBox1>
-            <Heart><div><img src={heart} alt="좋아요" /></div></Heart>
-
-              <Thumbnail src={listData.thumb} alt="class thumbnail" />
-              <CategoryTextStyle>
-                <Category>{info[selNum-1]}</Category>
-                <hr />
-                <Category className="line">{listData.lecturer}</Category>
-              </CategoryTextStyle>
-              <Title>{listData.name}</Title>
-              <Description>{listData.intro}</Description>
-              <PriceDate>
-                <div className="price">{listData.price}원</div>
-                <div className="dateContain">
-                  <div className="date">시작일 : {listData.startDate}</div>
-                  <div className="date">종료일 : {listData.endDate}</div>
-                </div>
-              </PriceDate>
-
-          </SectionBox1>
-          </div>
-            ))}
+          <Link to="/class"  >
+            <div key={list.num} onClick={() => {event(listData)}} >
+              <SectionBox1>
+                <Heart><div><img src={heart} alt="좋아요" /></div></Heart>
+                  <Thumbnail src={listData.thumb} alt="class thumbnail" />
+                  <CategoryTextStyle>
+                    <Category>{info[categoryNum]}</Category>
+                    <hr />
+                    <Category className="line">{listData.lecturer}</Category>
+                  </CategoryTextStyle>
+                  <Title>{listData.name}</Title>
+                  <Description>{listData.intro}</Description>
+                  <PriceDate>
+                    <div className="price">{listData.price}원</div>
+                    <div className="dateContain">
+                      <div className="date">시작일 : {listData.startDate}</div>
+                      <div className="date">종료일 : {listData.endDate}</div>
+                    </div>
+                  </PriceDate>
+              </SectionBox1>
+            </div>
+          </Link>
+          ))}
         </Section1>
         </SectionContain>
     </Contain>
+    </>
   )
 }
 

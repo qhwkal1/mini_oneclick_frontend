@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import Slider from "../utils/Slider";
 import ReviewWrite from "./Lecture_LeftDivision_ReviewWrite";
 import ReviewList from "./Lecture_LeftDivision_ReviewList";
+import { useContext } from "react";
+import { UserContext } from "../context/UserStore";
 
 const ClassMenu = styled.div`
   width: 65%;
@@ -172,17 +174,20 @@ const LeftDivision = () => {
   }
 
   const [lectureList, setLectureList] = useState("");
+  const context = useContext(UserContext);
+  const {lectureNum, categoryNum} = context;
   useEffect(() => {
     const LectureList = async() => {
       // category 번호와 강의 번호 대입
-      const rsp = await AxiosApi.viewLecture(4, 4);
+      console.log("카테고리:" + categoryNum + " " + "강의번호:" + lectureNum);
+      const rsp = await AxiosApi.viewLecture(categoryNum, lectureNum);
       if(rsp.status === 200) {
         setLectureList(rsp.data);
       }
       else alert("강의 불러오기 실패");
     }
     LectureList();
-  }, []);
+  }, [lectureNum, categoryNum]);
 
   console.log(lectureList);
 
@@ -202,12 +207,12 @@ const LeftDivision = () => {
       else console.log("viewList DB전송 실패");
     }
     loadReviewList();
-  },[]);
+  },[reviewListNum]);
 
   return (
     <Division1>
       {lectureList && lectureList.map(Lecturelist => (
-      <div key={Lecturelist.id}>
+      <div key={Lecturelist.num}>
         <ClassMenu>
           <div className="menu menu1">
             <div className={`menutree ${menuSel === 1 ? `select` : 'nosel'}`} onClick={()=>{MenuIndex(1)}}>클래스 소개</div>

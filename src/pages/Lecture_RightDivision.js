@@ -6,6 +6,8 @@ import StyledButton from "../utils/StyledButton"
 import like_icon from "../images/like_icon.png"
 import heart_icon from "../images/heart.png"
 import NaverMap from "../utils/NaverMap";
+import { useContext } from "react";
+import { UserContext } from "../context/UserStore";
 
 
 // 오른쪽 메뉴
@@ -68,10 +70,12 @@ const Contain = styled.div`
 `
 const RightDivision = () => {
   const [list, setList] = useState("");
-  
+  const context = useContext(UserContext);
+  const {memberNum, lectureNum, categoryNum} = context;
+
   useEffect(() => {
     const LectureList = async() => {
-      const rsp = await AxiosApi.viewLecture(4,4);
+      const rsp = await AxiosApi.viewLecture(categoryNum, lectureNum);
       if(rsp.status === 200) setList(rsp.data);
     }
     LectureList();

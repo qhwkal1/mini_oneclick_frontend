@@ -150,7 +150,7 @@ const Header = () => {
 
   // Context API 값 저장
   const context = useContext(UserContext);
-  const {userId, setUserId, isLogin, setIsLogin} = context;
+  const {userId, setUserId, isLogin, setIsLogin, setCategoryNum} = context;
 
   const onChange = (e) => {
     setSearchInput(e.target.value);
@@ -162,6 +162,12 @@ const Header = () => {
     navigate('/home');
   }
 
+  const navigateToCategory = (categoryNum) => {
+    setCategoryNum(categoryNum);
+    console.log("setCategoryNum 에 들어오는 값" + categoryNum);
+    navigate(`/category`);
+    
+  }
   return(
     <>
     <HeaderBlock>
@@ -211,12 +217,12 @@ const Header = () => {
             <ul className="classMenu">
             <br />
             <br />
-              <li><img src={all} alt="전체메뉴" /><span>전체</span></li>
-              <li><img src={hot} alt="인기메뉴" /><span>인기</span></li>
-              <li><img src={cook} alt="요리" /><span>요리</span></li>
-              <li><img src={bake} alt="베이킹" /><span>베이킹</span></li>
-              <li><img src={exercise} alt="운동" /><span>운동</span></li>
-              <li><img src={diy} alt="공예" /><span>공예</span></li>
+            <li><Link to="/category/details"><img src={all} alt="전체메뉴" /><span>전체</span></Link></li>
+              {/* <li><Link to="/category" sel={1}><img src={hot} alt="인기메뉴" /><span>인기</span></Link></li> */}
+              <li onClick={() => navigateToCategory(1)}><img src={cook} alt="요리" /><span>요리</span></li>
+              <li onClick={() => navigateToCategory(2)}><img src={bake} alt="베이킹" /><span>베이킹</span></li>
+              <li onClick={() => navigateToCategory(3)}><img src={diy} alt="공예" /><span>공예</span></li>
+              <li onClick={() => navigateToCategory(4)}><img src={exercise} alt="운동" /><span>운동</span></li>
             </ul>
           </li>
           <li className="firstMenu"><Link to="/" className="link_style">이벤트</Link></li>

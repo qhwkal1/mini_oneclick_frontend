@@ -9,12 +9,12 @@ const UserStore = (props) => {
   const [phone, setPhone] = useState("");
   const [mail, setMail] = useState("");
   const [memberNum, setMemberNum] = useState("");
-  const [lecturenum, setLectureNUm] = useState("");
+  const [lectureNum, setLectureNum] = useState("");
   const [categoryNum, setCategoryNum] = useState("");
 
   return(
   <> 
-  <UserContext.Provider value={{isLogin, setIsLogin, userName, setUserName, phone, setPhone, mail, setMail, memberNum, setMemberNum, lecturenum, setLectureNUm, userId, setUserId, categoryNum, setCategoryNum}}>
+  <UserContext.Provider value={{isLogin, setIsLogin, userName, setUserName, phone, setPhone, mail, setMail, memberNum, setMemberNum, lectureNum, setLectureNum, userId, setUserId, categoryNum, setCategoryNum}}>
     {props.children}
   </UserContext.Provider>
   </>

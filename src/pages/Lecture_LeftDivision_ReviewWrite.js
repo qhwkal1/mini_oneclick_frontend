@@ -145,11 +145,8 @@ const ReviewWrite = () => {
   const onChangeTitle = (e) => { setTitle(e.target.value); }
   const onChangeDesc = (e) => { setDesc(e.target.value); }
   
-  const num = 5; // 댓글 시퀀스 번호
-  const lecNum = 3; // 카테고리 내에 있는 강의 번호
-  // const memNum = 3; // 로그인 한 경우 사용자 값
   const context = useContext(UserContext);
-  const {memberNum} = context;
+  const {memberNum, LectureNum} = context;
 
   // 리뷰 작성하기 버튼 이벤트
   const PostReview = async() => {
@@ -160,7 +157,7 @@ const ReviewWrite = () => {
     if(memberNum === "") alert("로그인을 해주세요");
     
     // 나중에 num 값 삭제하고 java에서 sql문에 nextval로 바꾸기
-    const reviewWrite = await AxiosApi.reviewWrite(lecNum, memberNum, title, desc, url);
+    const reviewWrite = await AxiosApi.reviewWrite(LectureNum, memberNum, title, desc, url);
     if(reviewWrite.data === true) {
       alert("리뷰 작성 완료!");
       // URL.create 는 garbage collect 를 자동 실행하지 않기 떄문에 
