@@ -154,13 +154,19 @@ const Header = () => {
 
   const onChange = (e) => {
     setSearchInput(e.target.value);
-  }
+  };
 
   const logoutClick = () => {
     setIsLogin(false);
     setUserId("");
     navigate('/home');
-  }
+  };
+
+  const enterSearch = (e) => {
+    if (e.key === "Enter") {
+      navigate(`/Search/${searchInput}`);
+    }
+  };
 
   const navigateToCategory = (categoryNum) => {
     setCategoryNum(categoryNum);
@@ -177,7 +183,7 @@ const Header = () => {
           </Link>
           <div className="dummyBox"></div>
           <div className="searchBox">
-            <input type="text" value={searchInput} onChange={onChange} placeholder="찾으시는 클래스가 있나요?"/>
+            <input type="text" value={searchInput} onChange={onChange} onKeyDown={enterSearch} placeholder="찾으시는 클래스가 있나요?"/>
             <Link to={`/Search/${searchInput}`}>
               <button >검색</button>
             </Link>

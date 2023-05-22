@@ -12,6 +12,10 @@ const PageNationButton = styled.div`
   align-items: center;
   margin-top: 50px;
   
+  button {
+    margin: 0 3px;
+  }
+
   img {
     width: 7px;
     height: 7px;
@@ -19,7 +23,6 @@ const PageNationButton = styled.div`
   }
   .active {
     border: none;
-    margin: 0;
     &:hover {
       background-color: white;
       color: darkgray;
