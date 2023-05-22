@@ -144,10 +144,10 @@ const Login = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const closeModal = () => {
     setModalOpen(false);
-  }
+  };
   const confirmModal = () => {
     console.log("확인 버튼이 눌렸습니다.")
-  }
+  };
 
   const onChangeId = (e) => {
       const regexId = /^\w{5,20}$/;
@@ -157,7 +157,8 @@ const Login = () => {
       } else  {
           setIsId(true);
       }
-  }
+  };
+
   const onChangePw = (e) => {
       const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[a-z])(?=.*\d)[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]{8,16}$/;
       const passwordCurrent = e.target.value;
@@ -167,7 +168,13 @@ const Login = () => {
       } else {
           setIsPw(true);
       }
-  }
+  };
+
+    const enterLogin = (e) => {
+    if (e.key === "Enter") {
+      onClickLogin();
+    }
+  };
 
   
 
@@ -208,7 +215,7 @@ const Login = () => {
             <Input type="text" placeholder="아이디" value ={inputId} onChange={onChangeId}/>
           </div>
           <div className="item1">
-            <Input type="password" placeholder="패스워드" value ={inputPw} onChange={onChangePw}/>
+            <Input type="password" placeholder="패스워드" value ={inputPw} onChange={onChangePw} onKeyDown={enterLogin}/>
           </div>
           <div className="item1">
           {(isId && isPw) ?
