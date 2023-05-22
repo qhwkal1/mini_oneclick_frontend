@@ -3,9 +3,10 @@ import styled from "styled-components";
 import AxiosApi from "../api/AxiosApi";
 
 const SideBar = styled.div`
+  width: 300px;
   display: flex;
   float: right;
-  margin-right: 50px;
+  /* margin-right: 10px; */
   flex-direction: column;
   gap: 10px;
 `;

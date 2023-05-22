@@ -22,8 +22,7 @@ const LectureBox = styled.div`
   flex-direction: column;
   width: 240px;
   height: 290px;
-  /* border: 1px solid lightgray; */
-  margin-bottom: 50px;
+  margin: 30px 20px 20px 80px;
 `;
 
 const Wish = styled.div`
