@@ -25,7 +25,7 @@ const OrdinaryPayment = () => {
 
     const navigate = useNavigate(); // 결제성공시 결제완료 페이지로
 
-    const onClickPayment = async() => {
+    const onClickPaymentClass = async() => {
         console.log(userName);
         console.log(phone);
         console.log(memberNum);
@@ -52,7 +52,7 @@ const OrdinaryPayment = () => {
             buyer_tel: phone,
             buyer_email: mail,
             memberNum: memberNum, 
-            lectureNum: 1 // 임시더미데이터 수정예정(강의코드 받으면 contextapi로 가져올예정)
+            lectureNum: 10 // 임시더미데이터 수정예정(강의코드 받으면 contextapi로 가져올예정)
           };
           // 결제 창 호출
           IMP.request_pay(data, callback);
@@ -71,12 +71,12 @@ const OrdinaryPayment = () => {
           console.log(memberNum);
 
           try {
-            await AxiosApi.paymentInsert(1, memberNum, response.merchant_uid); // 여기 추가
+            await AxiosApi.paymentClass(10, memberNum, response.merchant_uid); // 여기 추가
             // 강의에서 가져온 가격만 들어가면됩니다!
             navigate("/PayComplite");
           } catch(e) {
             console.error(e);
-            console.log(e);
+            
           }
         } else {
           alert(`결제 실패 : ${error_msg}`);
@@ -88,7 +88,7 @@ const OrdinaryPayment = () => {
 
     return(
         <>
-            <PayBtn onClick={onClickPayment}>결제하기</PayBtn>
+            <PayBtn onClick={onClickPaymentClass}>결제하기</PayBtn>
         </>
     );
 };

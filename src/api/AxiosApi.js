@@ -228,11 +228,21 @@ const AxiosApi = {
     };
     return await axios.post(KH_DOMAIN + "/payment", payment);
   },
+  // 클래스 결제
+  paymentClass: async(lectureNum, memberNum, merchant_uid, amount) => {
+    const payClass = {
+      lectureNum: lectureNum,
+      memberNum: memberNum,
+      created: merchant_uid,
+      amount: amount
+    };
+    return await axios.post(KH_DOMAIN + "/payClass" , payClass);
+  },
+
   // 구독권 환불
-  payBack: async(num, amount) => {
+  payBack: async(paymentNum) => {
     const payback = {
-      num: num,
-      amount: amount,
+      paymentNum: paymentNum
     }
     return await axios.post(KH_DOMAIN + "/payback", payback);
   },
@@ -247,7 +257,15 @@ const AxiosApi = {
     };
     return await axios.post(KH_DOMAIN + "/ordinaryPay", payment);
   },
+  // 강의 환불
+  payBackClass: async(paymentNum) => {
+    const payBackClass = {
+      paymentNum: paymentNum
+    };
+    return await axios.post(KH_DOMAIN + "/payBackClass", payBackClass)
+  },
 
+  // 
   loadLectureImg : async(categoryNum, lectureNum) => {
     return await axios.get(KH_DOMAIN + `/class/img?categoryNum=${categoryNum} & lectureNum=${lectureNum}`);
   }

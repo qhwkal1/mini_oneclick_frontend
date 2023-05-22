@@ -22,6 +22,7 @@ import PayComplite from './pages/PayComplite';
 import Refund from './pages/Refund';
 import Lecture from './pages/Lecture_Main';
 import CategoryList from './pages/Category';
+import RefundClass from './pages/RefundClass';
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
           <Route path="/OrdinaryPayment" element={<OrdinaryPayment />}/>
           <Route path="/PayComplite" element={<PayComplite />}/>
           <Route path="/Refund" element={<Refund />}/>
+          <Route path="/Refund" element={<RefundClass />}/>
           <Route path="/Class" element={<Lecture />}/>
           <Route path="/Category" element={<CategoryList />}/>
           <Route path='/AdminLogin' element={<AdminLogin />} />
