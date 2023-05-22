@@ -3,6 +3,7 @@ import styled from "styled-components";
 import AxiosApi from "../api/AxiosApi";
 import { UserContext } from "../context/UserStore";
 import PageNation from "./PageNation";
+import MyOrderPeriod from "./MyOrderPeriod";
 
 const Container = styled.div`
   width: 100%;
@@ -22,6 +23,9 @@ const Container = styled.div`
     font-size: 0.7em;
     color: darkgray;
   }
+  .last-list {
+    margin-bottom: 100px;
+  }
   table {
     width: 100%;
     margin-top: 20px;
@@ -31,7 +35,6 @@ const Container = styled.div`
   button{
     font-size: 0.8em;
     font-weight: bold;
-    margin-top: 100px;
     border: 1px solid lightgray;
     border-radius: 3px;
     cursor: pointer;
@@ -115,7 +118,7 @@ const MyOrder = () => {
   const { userId } = context;
 
   // 결제 정보 조회
-  const [paymentInfo, setPaymentInfo] = useState("");
+  const [paymentInfo, setPaymentInfo] = useState([]);
   useEffect(() => {
     const paymentInfo = async() => {
       const response = await AxiosApi.paymentGet(userId);
@@ -124,13 +127,27 @@ const MyOrder = () => {
     paymentInfo();
   },[userId]);
 
+  // 기간 별 결제 내역 조회
+  const [filterInfo, setFilterInfo] = useState("");
+  useEffect(() => {
+    const currentDay = new Date();
+    const cal = 24 * 60 * 60 * 1000;
+    const filtered = paymentInfo.filter((item) => {
+      const paymentDay = new Date(item.created);
+      return currentDay.getTime() - paymentDay.getTime() <= 365 * cal;
+    });
+    setFilterInfo(filtered);
+  }, [paymentInfo]);
+  
+  console.log(filterInfo);
+  
   // 페이지네이션
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(1);
-  const totalPages = Math.max(Math.ceil(paymentInfo.length / itemsPerPage), 1);
+  const totalPages = Math.max(Math.ceil(filterInfo.length / itemsPerPage), 1);
   const lastItem = currentPage * itemsPerPage;
   const firstItem = lastItem - itemsPerPage;
-  const currentItem = paymentInfo.slice(firstItem, lastItem);
+  const currentItem = filterInfo.slice(firstItem, lastItem);
   const pageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   }
@@ -150,12 +167,8 @@ const MyOrder = () => {
     <hr />
     <li>결제 내역은 최근 1년을 기준으로 조회됩니다.</li>
     <li>결제 관련 상세 문의는 고객센터를 통해 빠른 처리를 도와드리겠습니다.</li>
-    <li>클래스 수강일 이후는 환불이 불가합니다.</li>
-    <div className="periodButton">
-    <button>1년</button>
-    <button>3개월</button>
-    <button>6개월</button>
-    </div>
+    <li className="last-list">클래스 수강일 이후는 환불이 불가합니다.</li>
+    <MyOrderPeriod paymentInfo={paymentInfo} filteredInfo={setFilterInfo}/>
     <table>
       <thead>
        <tr>

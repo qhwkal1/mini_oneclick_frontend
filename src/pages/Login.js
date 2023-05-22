@@ -177,7 +177,16 @@ const Login = () => {
     if(response.data.success === true) {
       const memberInfo = await AxiosApi.memberGet(inputId);
       console.log(memberInfo.data);
-      setUserId(inputId);  // UserStore에 값이 담겨져서 넘어감 전역에서 사용 가능
+      if(Array.isArray(memberInfo.data) && memberInfo.data.length > 0) {
+        const member = memberInfo.data[0];
+      // 조회한 회원 정보를 UserContext에 저장(PG사 요구데이터 and oneclick 데이터베이스 맞추기위해 필요..)
+      setUserId(inputId);
+      setUserName(member.name);
+      setPhone(member.tel);
+      setMail(member.mail);
+      setMemberNum(member.num);
+      console.log(member.num);
+ // UserStore에 값이 담겨져서 넘어감 전역에서 사용 가능
       setIsLogin(true);
       navigate("/mypage");
     } else {
@@ -185,6 +194,7 @@ const Login = () => {
       setModalOpen(true);
     }
   }
+}
 
   return(
     <>
