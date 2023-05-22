@@ -3,6 +3,7 @@ import styled from "styled-components";
 import AxiosApi from "../api/AxiosApi";
 import { useContext } from "react";
 import UserStore, { UserContext } from "../context/UserStore";
+// import firebase from "firebase/compat";
 
 
 // 수강 설명 이미지

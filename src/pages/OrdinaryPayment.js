@@ -6,13 +6,17 @@ import AxiosApi from "../api/AxiosApi";
 import { useNavigate } from "react-router-dom";
 
 const PayBtn = styled.button`
-  margin-top: 20px;
-  padding: 10px 20px;
-  border: none;
-  background-color: #FC7373;
+  border-radius: 5px;
   color: white;
-  font-weight: bold;
-  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+  font-weight:bold;
+  height: 40px;
+  width: 100%;
+  background-color: #FC7373;
+  border: none;
+  margin-bottom: 5px;
+  :hover {
+    cursor: pointer;
+  }
 
   /* 모바일 */
   @media (max-width: 768px) {
@@ -20,7 +24,7 @@ const PayBtn = styled.button`
   }`;
 
 
-const OrdinaryPayment = () => {
+const OrdinaryPayment = ({props}) => {
     const { userName, phone, mail, memberNum } = useContext(UserContext);
 
     const navigate = useNavigate(); // 결제성공시 결제완료 페이지로
@@ -88,7 +92,7 @@ const OrdinaryPayment = () => {
 
     return(
         <>
-            <PayBtn onClick={onClickPaymentClass}>결제하기</PayBtn>
+            <PayBtn onClick={onClickPaymentClass}>{props}원 결제하기</PayBtn>
         </>
     );
 };

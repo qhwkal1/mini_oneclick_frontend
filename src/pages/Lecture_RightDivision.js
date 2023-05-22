@@ -8,6 +8,8 @@ import heart_icon from "../images/heart.png"
 import NaverMap from "../utils/NaverMap";
 import { useContext } from "react";
 import { UserContext } from "../context/UserStore";
+import OrdinaryPayment from "./OrdinaryPayment";
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 // 오른쪽 메뉴
@@ -20,6 +22,19 @@ const Container = styled.div`
   min-width: 25%;
   box-shadow: 1px 1px 1px 1px lightgray;
   /* padding: auto; */
+  .btnStyle {
+    border-radius: 5px;
+  color: white;
+  font-weight:bold;
+  height: 40px;
+  width: 100%;
+  background-color: #FC7373;
+  border: none;
+  margin-bottom: 5px;
+  :hover {
+    cursor: pointer;
+  }
+  }
 `
 const ClassCategory = styled.div`
   display: inline-block;
@@ -40,7 +55,7 @@ const ClassBtn = styled.div`
   display: flex;
   margin: 5px auto;
   width: 100%;
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-wrap: nowrap;
   li {
     padding: 5px;
@@ -68,6 +83,11 @@ const Contain = styled.div`
   width: 90%;
   margin: 10px auto;
 `
+const PaymentStyle = styled.div`
+
+`
+
+
 const RightDivision = () => {
   const [list, setList] = useState("");
   const context = useContext(UserContext);
@@ -80,7 +100,10 @@ const RightDivision = () => {
     }
     LectureList();
   }, []);
-
+const pricePay = () => {
+  const navigate = useNavigate;
+  navigate("/subs");
+}
  return (
   <Container>
     {list && list.map(Lecturelist => (
@@ -93,11 +116,12 @@ const RightDivision = () => {
       </ClassTitle>
       <ClassBtn>
         <li><img src={heart_icon} alt="" />찜하기</li>
-        <li><img src={like_icon} alt="" />좋아요</li>
         <li><img src={heart_icon} alt="" />공유</li>
       </ClassBtn>
-      <StyledButton>{Lecturelist.price}원 결제하기</StyledButton> 
-      <StyledButton>구독하기</StyledButton> 
+      <PaymentStyle>
+        <OrdinaryPayment>{Lecturelist.price}원 결제</OrdinaryPayment> 
+        <StyledButton onClick={pricePay} >구독하기</StyledButton> 
+      </PaymentStyle>
       <ClassTitle >
         <h2>강의 장소</h2>
         {Lecturelist.addr}
