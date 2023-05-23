@@ -146,7 +146,7 @@ const MyCart = () => {
   const { userId } = context;
 
   // 내 장바구니 리스트 조회
-  const [cartInfo, setCartInfo] = useState("");
+  const [cartInfo, setCartInfo] = useState([]);
   useEffect(() => {
     const cartInfo = async() => {
       const response = await AxiosApi.myCartGet(userId);
@@ -155,8 +155,18 @@ const MyCart = () => {
     cartInfo();
   }, [userId]);
 
-  // 체크박스 
+  // 체크박스, 가격 계산
   const [checkItems, setCheckItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  useEffect(() => {
+    let priceSum = 0;
+    cartInfo.forEach((cart) => {
+      if (checkItems.includes(cart.cartNum)) {
+        priceSum += cart.price;
+      }
+    });
+    setTotalPrice(priceSum);
+  }, [cartInfo, checkItems]);
 
   // 전체 체크박스
   const allCheck = (e) => {
@@ -184,12 +194,15 @@ const MyCart = () => {
       }
     }
 
-  // 인원 선택
+  // 인원 선택, 가격 계산
   const decQuantity = (cartNum) => {
     setCartInfo((prevCartInfo) => {
       return prevCartInfo.map((cart) => {
         if (cart.cartNum === cartNum && cart.quantity > 1) {
-          return { ...cart, quantity: cart.quantity - 1 };
+          const updatedQuantity = cart.quantity - 1;
+          const unitPrice = cart.price / cart.quantity;
+          const updatedPrice = unitPrice * updatedQuantity;
+        return { ...cart, quantity: updatedQuantity, price: updatedPrice };
         }
         return cart;
       });
@@ -200,7 +213,10 @@ const MyCart = () => {
     setCartInfo((prevCartInfo) => {
       return prevCartInfo.map((cart) => {
         if (cart.cartNum === cartNum) {
-          return { ...cart, quantity: cart.quantity + 1 };
+          const updatedQuantity = cart.quantity + 1;
+          const unitPrice = cart.price / cart.quantity;
+          const updatedPrice = unitPrice * updatedQuantity;
+          return { ...cart, quantity: updatedQuantity, price: updatedPrice };
         }
         return cart;
       });
@@ -264,7 +280,8 @@ const MyCart = () => {
       </table>
       <button onClick={selectDelete}>선택 삭제</button>
       <div className="pay-button">
-        <button>결제하기</button>
+        {totalPrice ? (<button>총 {totalPrice.toLocaleString()}원 결제하기</button>) :
+        <button>결제하기</button>}
       </div>
     </Container>
     </>
