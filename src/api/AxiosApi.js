@@ -98,11 +98,12 @@ const AxiosApi = {
     return await axios.get(KH_DOMAIN + `/classDetail?id=${id}`);
   },
   // 후기 작성
-  writeReview: async(memNum, lecNum, content) => {
+  writeReview: async(memNum, lecNum, content, url) => {
     const write = {
       memNum: memNum,
       lecNum: lecNum,
-      content: content
+      content: content,
+      url: url
     }
     return await axios.post(KH_DOMAIN + "/writeReview", write);
   },

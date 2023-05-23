@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import sign from "../images/warning.png";
 
@@ -33,6 +34,7 @@ const Body = styled.div`
     color: white;
     margin-top: 50px;
     margin-bottom: 100px;
+    cursor: pointer;
   }
 
   .notification {
@@ -71,6 +73,7 @@ const Body = styled.div`
 
 const MySubsNone = () => {
 
+
   return(
     <>
       <Head>
@@ -79,7 +82,7 @@ const MySubsNone = () => {
       <Body>
         <hr />
         <p>현재 이용중인 구독권이 없습니다</p>
-        <button>구독권 구매하기</button> {/** 구독권 구매하기 페이지로 링크 걸어둘 예정 */}
+        <Link to="/subs"><button>구독권 구매하기</button></Link> {/** 구독권 구매하기 페이지로 링크 걸어둘 예정 */}
         <div className="notification">
           <img src={sign} alt="알림"></img>
           <p>유의사항</p>

@@ -23,7 +23,9 @@ import Refund from './pages/Refund';
 import Lecture from './pages/Lecture_Main';
 import CategoryList from './pages/Category';
 import RefundClass from './pages/RefundClass';
-
+import TermsOfUse from './pages/TermsOfUse';
+import PersonalInfo from './pages/PersonalInfo';
+import Event from './pages/Event';
 
 function App() {
   return (
@@ -54,6 +56,10 @@ function App() {
           <Route path='/Search/:searchInput' element={<Search />}/>
           <Route path="/Home" element={<Home />}/>  
           <Route path="/" element={<Home />}/>  
+          <Route path="/TermsOfUse" element={<TermsOfUse />}/>
+          <Route path="/PersonalInfo" element={<PersonalInfo />}/>
+          <Route path="/Event" element={<Event />}/>
+
         </Routes>
       </Router>
       </UserStore>

@@ -28,7 +28,7 @@ const Container1 = styled.div`
   flex-wrap: wrap;
   font-weight: bold;
   font-size: 1.3em;
-  gap: 30px;
+  gap: 60px;
 `;
 
 const Container2 = styled.div`
@@ -38,7 +38,7 @@ const Container2 = styled.div`
   flex-wrap: wrap;
   font-weight: bold;
   font-size: 1.3em;
-  gap: 30px;
+  gap: 60px;
 `;
 
 const SliderBox = styled.div`

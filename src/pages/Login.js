@@ -144,10 +144,11 @@ const Login = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const closeModal = () => {
     setModalOpen(false);
-  }
+  };
+
   const confirmModal = () => {
     console.log("확인 버튼이 눌렸습니다.")
-  }
+  };
 
   const onChangeId = (e) => {
       const regexId = /^\w{5,20}$/;
@@ -157,7 +158,8 @@ const Login = () => {
       } else  {
           setIsId(true);
       }
-  }
+  };
+
   const onChangePw = (e) => {
       const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[a-z])(?=.*\d)[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]{8,16}$/;
       const passwordCurrent = e.target.value;
@@ -167,9 +169,13 @@ const Login = () => {
       } else {
           setIsPw(true);
       }
-  }
+  };
 
-  
+  const enterLogin = (e) => {
+    if (e.key === "Enter") {
+      onClickLogin();
+    }
+  };
 
   const onClickLogin = async() => {
     const response = await AxiosApi.memberLogin(inputId, inputPw);
@@ -177,14 +183,24 @@ const Login = () => {
     if(response.data.success === true) {
       const memberInfo = await AxiosApi.memberGet(inputId);
       console.log(memberInfo.data);
-      setUserId(inputId);  // UserStore에 값이 담겨져서 넘어감 전역에서 사용 가능
-      setIsLogin(true);
-      navigate("/mypage");
-    } else {
-      console.log("로그인 에러!!");
-      setModalOpen(true);
-    }
-  }
+      if(Array.isArray(memberInfo.data) && memberInfo.data.length > 0) {
+        const member = memberInfo.data[0];
+        // 조회한 회원 정보를 UserContext에 저장(PG사 요구데이터 and oneclick 데이터베이스 맞추기위해 필요..)
+        setUserId(inputId);
+        setUserName(member.name);
+        setPhone(member.tel);
+        setMail(member.mail);
+        setMemberNum(member.num);
+        console.log(member.num);
+        // UserStore에 값이 담겨져서 넘어감 전역에서 사용 가능
+        setIsLogin(true);
+        navigate("/home");
+      } else {
+        console.log("로그인 에러!!");
+        setModalOpen(true);
+      };
+    };
+  };
 
   return(
     <>
@@ -198,7 +214,7 @@ const Login = () => {
             <Input type="text" placeholder="아이디" value ={inputId} onChange={onChangeId}/>
           </div>
           <div className="item1">
-            <Input type="password" placeholder="패스워드" value ={inputPw} onChange={onChangePw}/>
+            <Input type="password" placeholder="패스워드" value ={inputPw} onChange={onChangePw} onKeyDown={enterLogin}/>
           </div>
           <div className="item1">
           {(isId && isPw) ?

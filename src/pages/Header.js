@@ -6,13 +6,10 @@ import mypage from "../images/account.png";
 import wish from "../images/wish.png";
 import { UserContext } from "../context/UserStore";
 import all from "../images/all.png";
-import hot from "../images/hot.png";
 import cook from "../images/cook.png";
 import bake from "../images/bake.png";
 import diy from "../images/diy.png";
 import exercise from "../images/exercise.png";
-
-
 
 const HeaderBlock = styled.header`
   display: flex;
@@ -21,6 +18,7 @@ const HeaderBlock = styled.header`
   width: 100%;
   margin: 0 auto;
   height: 150px;
+  border-bottom: 1px solid lightgrey;
 
   .logoTop {
     /* margin-left: 110px; */
@@ -85,8 +83,6 @@ const NavBlock = styled.div`
   padding-left: 45px;
   width: 100%;
 
-  /* border-bottom: 1px solid lightgrey; */
-
   .firstMenu {
     display: inline-block;
     padding: 30px;
@@ -108,8 +104,6 @@ const NavBlock = styled.div`
     transition: 1s;
     list-style: none;
 
-    /* background-color: white; */
-
 
     li {
       display: flex;
@@ -118,7 +112,7 @@ const NavBlock = styled.div`
       justify-content: center;
       float: left;
       margin-left: 30px;
-      margin-top: 10px;
+      /* margin-top: 10px; */
       text-align: left;
     }
 
@@ -231,12 +225,12 @@ const Header = () => {
               <li onClick={() => navigateToCategory(4)}><img src={exercise} alt="운동" /><span>운동</span></li>
             </ul>
           </li>
-          <li className="firstMenu"><Link to="/" className="link_style">이벤트</Link></li>
-          <li className="firstMenu"><Link to="/" className="link_style">구독권</Link></li>
+          <li className="firstMenu"><Link to="/Event" className="link_style">이벤트</Link></li>
+          <li className="firstMenu"><Link to="/Subs" className="link_style">구독권</Link></li>
         </ul>
       </NavBlock>
     </HeaderBlock>
-    <hr style={{backgroundColor:"lightgray", border:".3px solid lightgray"}}/>
+    {/* <hr style={{backgroundColor:"lightgray", border:".3px solid lightgray"}}/> */}
     </>
   );
 };

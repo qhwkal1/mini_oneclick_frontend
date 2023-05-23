@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Modal from "../utils/Modal";
 
 const FooterStyled = styled.footer`
   width: 100%;
@@ -48,6 +49,15 @@ const Section = styled.ul`
 `;
 
 const Footer = () => {
+  const [modalCall, setModalCall] = useState(false);
+
+  const call = () => {
+    setModalCall(true);
+  };
+
+  const closeModal = () => {
+    setModalCall(false);
+  } 
 
   return(
     < FooterStyled>
@@ -57,22 +67,25 @@ const Footer = () => {
               <ul> <b>ONE Click</b>
                 <li><Link to="/" className="footer_link">공지사항</Link></li>
                 <li><Link to="/" className="footer_link">서비스 소개</Link></li>
-                <li><Link to="/" className="footer_link">채용</Link></li>
               </ul>
               <ul> <b>이용안내</b>
                 <li><Link to="/" className="footer_link">클래스 가이드</Link></li>
                 <li><Link to="/" className="footer_link">구독권 가이드</Link></li>
-                <li><Link to="/" className="footer_link">제휴</Link></li>
               </ul>
               <ul> <b>정책</b>
-                <li><Link to="/" className="footer_link">이용약관</Link></li>
-                <li><Link to="/" className="footer_link">개인정보 처리방침</Link></li>
+                <li><Link to="/TermsOfUse" className="footer_link">이용약관</Link></li>
+                <li><Link to="/personalInfo" className="footer_link">개인정보 처리방침</Link></li>
               </ul>
               <div>
                 <ul> <b>고객지원</b>
                   <li>평일 9:00 ~ 16:00</li>
                 </ul>
-                <button>문의</button>
+                <div>
+                  <button className="callBtn" onClick={call}>문의</button>
+                  <Modal open={modalCall} close={closeModal}>
+                    상담원 전화 연결 : 1644-1644
+                  </Modal>
+                </div>
               </div>
           </Section>
           <p className="pFooter">

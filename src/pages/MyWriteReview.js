@@ -3,9 +3,10 @@ import styled from "styled-components";
 import AxiosApi from "../api/AxiosApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../context/UserStore";
-import ImageUploader from "./ImgTest";
 import MypageFooter from "./MypageFooter";
 import MypageHeader from "./MypageHeader";
+import { storage } from "../api/firebase";
+import cancel from "../images/cancel.png"
 
 const BodyContainer = styled.div`
   width: 100vw;
@@ -94,6 +95,11 @@ const Write = styled.div`
     }
   }
 
+  .disable-button {
+    background-color: darkgray;
+    cursor: none;
+  }
+
   hr {
     background-color: lightgray;
     border: .3px solid lightgray;
@@ -110,25 +116,76 @@ const UploadSection = styled.div`
   }
 `;
 
+const ImgContainer = styled.div`
+
+
+  .btn-upload, button {
+  width: 55px;
+  height: 20px;
+  background: #fff;
+  border: 1px solid lightgray;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 0.7em;
+  color: darkgray;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+    &:hover {
+      background: lightgray;
+      color: white;
+      border: none;
+    }
+  }
+
+  #file {
+  display: none;
+ }
+
+`;
+
+const Attachment = styled.div`
+  position: relative;
+  width: 100%;
+  margin-top: 5px;
+  img {
+    &:nth-child(1) {
+      
+    }
+    &:nth-child(2) {
+      position: absolute;
+      top: 0;
+      left: 90px;
+      cursor: pointer;
+    }
+  }
+
+`;
+
 
 const MyWriteReview = () => {
   const navigate = useNavigate();
   const context = useContext(UserContext);
   const { userId } = context;
-
   const { lectureId } = useParams();
 
   // 글자 수 표시
   const [inputCount, setInputCount] = useState(0);
   const MAX_LENGTH = 100;
-
   // 후기 작성, 수정
   const [inputContext, setInputContext] = useState("");
-  
   // 강의 정보
   const [lectureInfo, setlectureInfo] = useState("");
   // 회원 정보
   const [memberInfo, setMemberInfo] = useState("");
+  // 첨부 이미지 미리보기
+  const [attachment, setAttachment] = useState(); 
+  // 첨부 파일
+  const [file, setFile] = useState(null);
+  // 첨부 파일 url
+  const [url, setUrl] = useState('');
 
   useEffect(() => {
     const lectureInfo = async() => {
@@ -150,10 +207,40 @@ const MyWriteReview = () => {
     const rsp = await AxiosApi.memberGet(userId);
     if(rsp.status === 200) setMemberInfo(rsp.data);
     const memNum = rsp.data.length > 0 ? rsp.data[0].num.toString() : "";
-    const response = await AxiosApi.writeReview(memNum, lectureId, inputContext);
+  
+    const storageRef = storage.ref();
+    const fileRef = storageRef.child(file.name);
+    await fileRef.put(file);
+    console.log('File uploaded successfully!');
+    const url = await fileRef.getDownloadURL();
+    console.log("저장경로 확인 : " + url);
+    
+    setUrl(url);
+    setAttachment("");
+
+    const response = await AxiosApi.writeReview(memNum, lectureId, inputContext, url);
     console.log(response.data);
     navigate('/MyPage', { state: { selected: "후기" } });
   };
+
+  const handleFileInputChange = (e) => {
+    const {target:{files}} = e;
+    const theFile = files[0];
+    const reader = new FileReader();
+    setFile(theFile);
+
+    reader.onloadend = (finishedEvent) => {
+      const { currentTarget: {result}} = finishedEvent
+      setAttachment(result);
+    }
+    reader.readAsDataURL(theFile);
+  };
+
+  const onClearAttachment = () => { // 사진 제거
+    setAttachment(null);
+    setFile('');
+    setUrl('');
+  }
 
   return( 
     <>
@@ -172,10 +259,27 @@ const MyWriteReview = () => {
         <div id="nowByte" class="count"><span>{inputCount.toLocaleString()}</span>/{MAX_LENGTH.toLocaleString()}자</div>
       </Section2>
       <UploadSection>
-      <ImageUploader></ImageUploader>
+      <ImgContainer>
+      <div>
+        <label htmlFor='file'>
+          <div className='btn-upload'>사진 첨부</div>
+      </label>
+        <input type='file' id='file' accept='image/*' onChange={handleFileInputChange} />
+        <Attachment>
+        {attachment && (
+            <div>
+              <img src={attachment} width="100px" height="100px" alt="attachment"/>
+              <img src={cancel} alt="취소버튼" width="15px" height="15px" onClick={onClearAttachment} />
+            </div>
+          )}
+        </Attachment>
+      </div>
+    </ImgContainer>
       </UploadSection>
       <Write>
-      <button onClick={changeReview}>작성하기</button>
+      {(attachment && inputContext) ?
+      <button onClick={changeReview}>작성하기</button> :
+      <button className="disable-button">작성하기</button>}
       <hr />
       </Write>
       <div className="emptyBox"></div>
