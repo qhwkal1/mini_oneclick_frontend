@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import AxiosApi from "../api/AxiosApi";
 import { useContext } from "react";
-import UserStore, { UserContext } from "../context/UserStore";
-// import firebase from "firebase/compat";
+import { UserContext } from "../context/UserStore";
+import { storage } from "../api/firebase";
+import { ref, getDownloadURL } from "firebase/storage";
 
 
 // 수강 설명 이미지
@@ -38,7 +38,7 @@ const ClassImg = styled.div`
     transform: scaleX(1);
     transform-origin: bottom left;
   }
-  img:nth-child(4):hover {
+  img:last-child:hover {
     /* overflow: hidden; */
     width: 100%;
     transform-origin: bottom right;
@@ -50,18 +50,34 @@ const ClassImg = styled.div`
 const MainIMG = () => {
   const context = useContext(UserContext);
   const { categoryNum, lectureNum } = context;
-  // useEffect(() => {
-  //   const loadLectureImg = async() => {
-  //     const rsp = await AxiosApi.loadLectureImg(categoryNum, lectureNum);
-  //   }
-  // })
+  const [img, setImg] = useState([]);
+  const [imageUrls, setImageUrls] = useState([]);
+
+
+  useEffect(() => {
+    const storageRef = ref(storage, `LectureIMG`); // storage, `파일경로`
+    console.log(storageRef);
+    Promise.all([
+      getDownloadURL(storageRef, "1.jpg"), // storageRef, `파일경로`
+      getDownloadURL(storageRef, "2.jpg"), // storageRef, `파일경로`
+      getDownloadURL(storageRef, "3.png"), // storageRef, `파일경로`
+      getDownloadURL(storageRef, "4.jpg")  // storageRef, `파일경로`
+    ])
+    .then((urls) => {
+      setImageUrls(urls);
+      console.log(urls);
+    })
+    .catch((error) =>  {
+      console.error("이미지 로딩 실패!!", error);
+    })
+
+    }, [])
 
   return (
-    <ClassImg onClick={()=>{console.log(categoryNum, lectureNum)}}>
-      {detailImg1}
-      {detailImg2}
-      {detailImg3}
-      {detailImg4}
+    <ClassImg >
+      {/* {urls && urls.map(imgList => {
+        <img src={}></img>
+      })} */}
     </ClassImg>
   )
 }

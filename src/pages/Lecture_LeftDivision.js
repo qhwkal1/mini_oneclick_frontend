@@ -187,7 +187,7 @@ const LeftDivision = () => {
       else alert("강의 불러오기 실패");
     }
     LectureList();
-  }, [lectureNum, categoryNum]);
+  }, [menuSel]);
 
   console.log(lectureList);
 
