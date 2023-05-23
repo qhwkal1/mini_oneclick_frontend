@@ -23,7 +23,7 @@ cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 
 
 const Payment = ({ price }) => {
-    const { userName, phone, mail, memberNum } = useContext(UserContext);
+    const { userName, phone, mail, memberNum, lectureNum } = useContext(UserContext);
     let type = ""; // 구독 Type_값을 위해..
       if(price === 300000) {
         type = "3개월";
@@ -74,7 +74,7 @@ const Payment = ({ price }) => {
         buyer_tel: phone,
         buyer_email: mail,
         memberNum: memberNum, //(회원시퀀스로 데이터베이스에 누가결제했는지 저장할 예정)
-        lectureNum: 1 // 임시더미데이터 수정예정(강의코드 받으면 contextapi로 가져올예정)
+        lectureNum: lectureNum // 임시더미데이터 수정예정(강의코드 받으면 contextapi로 가져올예정)
       };
       // 결제 창 호출
       IMP.request_pay(data, callback);
@@ -92,9 +92,10 @@ const Payment = ({ price }) => {
       console.log(phone);
       console.log(mail);
       console.log(memberNum);
+      console.log(lectureNum);
       console.log(type);
       try {
-        await AxiosApi.paymentInsert(1, memberNum, response.merchant_uid, price, type);
+        await AxiosApi.paymentInsert(lectureNum, memberNum, response.merchant_uid, price, type);
         // 위에 1에 lectureNum 들어갈예정 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         navigate("/PayComplite");
       } catch(e) {
