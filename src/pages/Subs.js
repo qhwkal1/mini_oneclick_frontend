@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import AxiosApi from "../api/AxiosApi";
 import Payment from "./Payment";
-
+import Header from "./Header";
+import Footer from "./Footer";
 
 const Container = styled.div`
   background-color: #FEFDFD;
@@ -99,6 +100,7 @@ const Subs = () => {
   }
 
   return(
+    
     <Container>
       <h1 className="title">정기 구독권</h1>
       <Subscriptions>
