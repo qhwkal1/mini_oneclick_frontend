@@ -143,7 +143,7 @@ const Container = styled.div`
 
 const MyCart = () => {
   const context = useContext(UserContext);
-  const { userId } = context;
+  const { userId, setLectureNum, setLectureName ,setAmount } = context;
 
   // 내 장바구니 리스트 조회
   const [cartInfo, setCartInfo] = useState([]);
@@ -151,6 +151,15 @@ const MyCart = () => {
     const cartInfo = async() => {
       const response = await AxiosApi.myCartGet(userId);
       if(response.status === 200) setCartInfo(response.data);
+      const cartPayInfo = await AxiosApi.myCartGet(userId);
+      console.log(cartPayInfo.data);
+      if(Array.isArray(cartInfo.data) && cartPayInfo.data.length > 0) {
+        const payCart = cartInfo.data[0];
+        setAmount(payCart.amount);
+        setLectureNum(payCart.lectureNum);
+        setLectureName(payCart.lectureName);
+      }
+
     };
     cartInfo();
   }, [userId]);

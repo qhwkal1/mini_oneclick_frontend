@@ -1,4 +1,5 @@
 import axios from "axios";
+import { async } from "q";
 const KH_DOMAIN = "http://localhost:8111";
 
 const AxiosApi = {
@@ -218,6 +219,7 @@ const AxiosApi = {
     return await axios.get(KH_DOMAIN + `/mySubs?id=${id}`);
   },
 
+
   // 구독권 결제
   paymentInsert: async(lectureNum, memberNum, merchant_uid, amount, type) => {
     const payment = {
@@ -247,6 +249,16 @@ const AxiosApi = {
     }
     return await axios.post(KH_DOMAIN + "/payback", payback);
   },
+  // My Cart 상품 구매
+  PaymentCartClass: async(lectureNum, memberNum, merchant_uid, amount) => {
+    const payCart = {
+      lectureNum: lectureNum,
+      memberNum: memberNum,
+      created: merchant_uid,
+      amount: amount
+    };
+    return await axios.post(KH_DOMAIN + "/payCart", payCart);
+  },
 
   // 일반 강의 결제
   paymentIn: async(lectureNum, memberNum, merchant_uid, amount) => {
@@ -265,6 +277,7 @@ const AxiosApi = {
     };
     return await axios.post(KH_DOMAIN + "/payBackClass", payBackClass)
   },
+  
 
   // 
   loadLectureImg : async(categoryNum, lectureNum) => {

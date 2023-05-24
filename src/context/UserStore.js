@@ -11,10 +11,12 @@ const UserStore = (props) => {
   const [memberNum, setMemberNum] = useState("");
   const [lectureNum, setLectureNum] = useState("");
   const [categoryNum, setCategoryNum] = useState("");
+  const [lectureName, setLectureName] = useState("");
+  const [amount, setAmount] = useState("");
 
   return(
   <> 
-  <UserContext.Provider value={{isLogin, setIsLogin, userName, setUserName, phone, setPhone, mail, setMail, memberNum, setMemberNum, lectureNum, setLectureNum, userId, setUserId, categoryNum, setCategoryNum}}>
+  <UserContext.Provider value={{lectureName, setLectureName, amount, setAmount, isLogin, setIsLogin, userName, setUserName, phone, setPhone, mail, setMail, memberNum, setMemberNum, lectureNum, setLectureNum, userId, setUserId, categoryNum, setCategoryNum}}>
     {props.children}
   </UserContext.Provider>
   </>
